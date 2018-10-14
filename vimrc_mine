@@ -54,6 +54,11 @@ Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 "latex plugin
 Plug 'lervag/vimtex'
+"vim easy align plugin
+Plug 'junegunn/vim-easy-align'
+"highlight overused words
+Plug 'dbmrq/vim-ditto'
+
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
 " Plug 'junegunn/vim-easy-align'
 
@@ -110,20 +115,21 @@ set noswapfile
 nnoremap <space> za
 
 "tabs
-au BufNewFile,BufRead *.py
+au BufNewFile,BufRead *.py,*.tex
     \ set tabstop=4 |
     \ set softtabstop=4 |
     \ set shiftwidth=4 |
     \ set textwidth=80 |
     \ set expandtab |
     \ set autoindent |
-    \ set fileformat=unix
+    \ set fileformat=unix |
+	\ set colorcolumn=81
 
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
-set textwidth=80
-set colorcolumn=81
+"set textwidth=80
+"set colorcolumn=81
 
 "Flagging Unnecessary Whitespace
 "au BufRead,BufNewFile *.py,*.pyw,*.c,*.h
@@ -204,19 +210,34 @@ map <F8> :tabp<CR>
 map <F9> :tabn<CR>
 "map keys so python executes current script
 map <C-s> :w<CR>:!python %<CR>
+map <C-d> :w<CR>:!python3 %<CR>
 "map Ctrl+s to write file and run it by pyton
 imap <C-s> <Esc>:w<CR>:!python %<CR>
+imap <C-d> <Esc>:w<CR>:!python3 %<CR>
+" Allow us to use Ctrl-s and Ctrl-q as keybinds
+silent !stty -ixon
+" Restore default behaviour when leaving Vim.
+autocmd VimLeave * silent !stty ixon
 "Enter to insert a new-line after the current line
 "Ctrl-o for "inserting a line before the current line
 "stay in the line where you have been before with "j" and "k"
 nmap <C-o> O<Esc>j
-nmap <CR> o<Esc>k
+nmap <CR> i<CR><Esc>
 "comment lines easily in normal(command) mode
 "with <F3> and <F4>
 nmap <F3> 0i#<Space><Esc>h
 nmap <F4> <End>a<Tab><Tab>#<Space>
+
+au BufNewFile,BufRead *.tex
+	\ nmap <F3> 0i%<Space><Esc>h |
+	\ nmap <F4> <End>a<Tab><Tab>%<Space>
+
 "disable vimtex warnings
 let g:vimtex_compiler_latexmk = {'callback' : 0}
+
+"enable error navigation with ":lnext" and "lprev" commands
+let g:syntastic_always_populate_loc_list = 1
+"let g:ycm_always_populate_location_list = 1
 
 "enable omnicompletion
 "filetype plugin on
@@ -237,3 +258,61 @@ let g:vimtex_compiler_latexmk = {'callback' : 0}
 "Goyo.vim limelight integration
 "autocmd! User GoyoEnter Limelight
 "autocmd! User GoyoLeave Limelight!
+"
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+"
+" " Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+" Use autocmds to check your text automatically and keep the highlighting
+" up to date (easier):
+au FileType markdown,text,tex DittoOn  " Turn on Ditto's autocmds
+nmap <leader>di <Plug>ToggleDitto      " Turn Ditto on and off
+" Use autocmds to check your text automatically and keep the highlighting
+" up to date (easier):
+au FileType markdown,text,tex DittoOn  " Turn on Ditto's autocmds
+nmap <leader>di <Plug>ToggleDitto      " Turn Ditto on and off
+
+" If you don't want the autocmds, you can also use an operator to check
+" specific parts of your text:
+" vmap <leader>d <Plug>Ditto	       " Call Ditto on visual selection
+" nmap <leader>d <Plug>Ditto	       " Call Ditto on operator movement
+
+nmap =d <Plug>DittoNext                " Jump to the next word
+nmap -d <Plug>DittoPrev                " Jump to the previous word
+nmap +d <Plug>DittoGood                " Ignore the word under the cursor
+nmap _d <Plug>DittoBad                 " Stop ignoring the word under the cursor
+nmap ]d <Plug>DittoMore                " Show the next matches
+nmap [d <Plug>DittoLess                " Show the previous matches
+" If you don't want the autocmds, you can also use an operator to check
+" specific parts of your text:
+" vmap <leader>d <Plug>Ditto	       " Call Ditto on visual selection
+" nmap <leader>d <Plug>Ditto	       " Call Ditto on operator movement
+
+nmap =d <Plug>DittoNext                " Jump to the next word
+nmap -d <Plug>DittoPrev                " Jump to the previous word
+nmap +d <Plug>DittoGood                " Ignore the word under the cursor
+nmap _d <Plug>DittoBad                 " Stop ignoring the word under the cursor
+nmap ]d <Plug>DittoMore                " Show the next matches
+nmap [d <Plug>DittoLess                " Show the previous matches
+
+" set paste and nopaste toggle to paste clipboard stuff
+set pastetoggle=<F2>
+
+" select all lines with ctrl-A
+map <C-a> <esc>ggVG<CR>
+
+" highlight the cursor line
+set cursorline
+hi Cursor ctermbg=172
+
+" vim autocomplete settings
+set completeopt=longest,menuone,preview
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" set dictionary: it works with ctrl+x default
+set dictionary+=/usr/share/dict/words
+
+" Add 'k' to the list to enable dictionary completion without ctrl+x for latex files
+set complete+=k

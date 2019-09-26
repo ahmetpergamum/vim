@@ -58,6 +58,14 @@ Plug 'lervag/vimtex'
 Plug 'junegunn/vim-easy-align'
 "highlight overused words
 Plug 'dbmrq/vim-ditto'
+"js syntax highlighting and improved indentation
+Plug 'pangloss/vim-javascript'
+"js code completion
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"Plug 'ternjs/tern_for_vim', { 'for': 'javascript' }
+" Prettier code formatting plugin installed with coc
+" post install (yarn install | npm install)
+" Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
 " Plug 'junegunn/vim-easy-align'
@@ -114,6 +122,18 @@ set noswapfile
 " Enable folding with the spacebar
 nnoremap <space> za
 
+" enhance YCM JS completion with tern's smarts
+"autocmd FileType javascript setlocal omnifunc=tern#Complete
+
+"Enables syntax highlighting for JSDoc NGDocs and Flow
+let g:javascript_plugin_jsdoc = 1
+let g:javascript_plugin_ngdoc = 1
+let g:javascript_plugin_flow = 1
+
+" coc.vim get correct comment highlighting
+autocmd FileType json syntax match Comment +\/\/.\+$+
+
+
 "tabs
 au BufNewFile,BufRead *.py,*.tex
     \ set tabstop=4 |
@@ -144,6 +164,11 @@ match TrailSpace / \+$/
 autocmd ColorScheme * highlight BadWhitespace ctermbg=red guibg=darkred
 autocmd ColorScheme * highlight UnwanttedTab ctermbg=red guibg=darkred
 autocmd ColorScheme * highlight TrailSpace guibg=red ctermbg=darkred
+
+" open NERDTree and
+au vimenter *  NERDTree " older one
+" move the cursor to the file editing area
+autocmd VimEnter * wincmd p
 
 set encoding=utf-8
 
@@ -206,11 +231,11 @@ set backspace=indent,eol,start
 
 "CUSTOM KEY MAPPINGS
 "navigate between tabs
-map <F8> :tabp<CR>
-map <F9> :tabn<CR>
+"map <F8> :tabp<CR>
+"map <F9> :tabn<CR>
 "map keys so python executes current script
 map <C-s> :w<CR>:!python %<CR>
-map <C-d> :w<CR>:!python3 %<CR>
+"map <C-d> :w<CR>:!python3 %<CR>
 "map Ctrl+s to write file and run it by pyton
 imap <C-s> <Esc>:w<CR>:!python %<CR>
 imap <C-d> <Esc>:w<CR>:!python3 %<CR>
@@ -225,8 +250,8 @@ nmap <C-o> O<Esc>j
 nmap <CR> i<CR><Esc>
 "comment lines easily in normal(command) mode
 "with <F3> and <F4>
-nmap <F3> 0i#<Space><Esc>h
-nmap <F4> <End>a<Tab><Tab>#<Space>
+nmap <F3> 0i//<Space><Esc>h
+nmap <F4> <End>a<Tab><Tab>//<Space>
 
 au BufNewFile,BufRead *.tex
 	\ nmap <F3> 0i%<Space><Esc>h |

@@ -62,6 +62,8 @@ Plug 'dbmrq/vim-ditto'
 Plug 'pangloss/vim-javascript'
 "js code completion
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" easy coding html css
+Plug 'mattn/emmet-vim'
 "Plug 'ternjs/tern_for_vim', { 'for': 'javascript' }
 " Prettier code formatting plugin installed with coc
 " post install (yarn install | npm install)
@@ -133,6 +135,17 @@ let g:javascript_plugin_flow = 1
 " coc.vim get correct comment highlighting
 autocmd FileType json syntax match Comment +\/\/.\+$+
 
+" automatically change the working dir
+" set autochdir
+" if it does not work with some plugins use
+" autocmd BufEnter * silent! lcd %:p:h
+" manual command to change vim dir
+" :cd %:p:h
+"
+" shortcut for changing dir in normal mode type \cd
+" after cd it also show the dir for checking
+nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
+
 
 "tabs
 au BufNewFile,BufRead *.py,*.tex
@@ -145,9 +158,9 @@ au BufNewFile,BufRead *.py,*.tex
     \ set fileformat=unix |
 	\ set colorcolumn=81
 
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
 "set textwidth=80
 "set colorcolumn=81
 
@@ -341,3 +354,6 @@ set dictionary+=/usr/share/dict/words
 
 " Add 'k' to the list to enable dictionary completion without ctrl+x for latex files
 set complete+=k
+
+"remap the default emmet leader key <C-Y> to <C-Z>:
+"let g:user_emmet_leader_key='<C-Z>'

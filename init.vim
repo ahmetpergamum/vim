@@ -66,17 +66,16 @@ Plug 'dbmrq/vim-ditto'
 "js syntax highlighting and improved indentation
 Plug 'pangloss/vim-javascript'
 "js code completion
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " easy coding html css
 Plug 'mattn/emmet-vim'
 "ALE (Asynchronous Lint Engine) is a plugin providing linting
 "(syntax checking and semantic errors)
 "in NeoVim 0.2.0+ and Vim 8
 Plug 'dense-analysis/ale'
-"Plug 'ternjs/tern_for_vim', { 'for': 'javascript' }
 " Prettier code formatting plugin installed with coc
 " post install (yarn install | npm install)
-" Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
 " Plug 'junegunn/vim-easy-align'
@@ -205,7 +204,7 @@ if has('gui_running')
 	"colorscheme solarized
 else
 	"colorscheme distinguished
-	"colorscheme solarized
+	colorscheme solarized
 	"colorscheme palenight
 
 	"set background=dark
@@ -216,7 +215,7 @@ else
 	"let ayucolor="dark"   " for dark version of theme
 	"colorscheme ayu
 
-	colorscheme gruvbox
+	"colorscheme gruvbox
 	set background=dark    " Setting dark mode
 	"set background=light   " Setting light mode
 
@@ -366,3 +365,15 @@ set complete+=k
 
 "remap the default emmet leader key <C-Y> to <C-Z>:
 "let g:user_emmet_leader_key='<C-Z>'
+"
+" Start autocompletion after 4 chars
+let g:ycm_min_num_of_chars_for_completion = 4
+let g:ycm_min_num_identifier_candidate_chars = 4
+let g:ycm_enable_diagnostic_highlighting = 0
+" Don't show YCM's preview window [ I find it really annoying ]
+set completeopt-=preview
+let g:ycm_add_preview_to_completeopt = 0
+
+" run prettier while saving the file
+let g:prettier#autoformat = 0
+autocmd BufWritePre *.js,*.json,*.css,*.scss,*.less,*.graphql PrettierAsync
